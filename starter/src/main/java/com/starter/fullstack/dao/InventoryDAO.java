@@ -8,6 +8,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.util.Assert;
 
 /**
@@ -51,8 +54,9 @@ public class InventoryDAO {
    * @return Created/Updated Inventory.
    */
   public Inventory create(Inventory inventory) {
-    // TODO
-    return null;
+    inventory.setId(null);
+    return mongoTemplate.insert(inventory);
+    //return null;
   }
 
   /**
@@ -61,8 +65,8 @@ public class InventoryDAO {
    * @return Found Inventory.
    */
   public Optional<Inventory> retrieve(String id) {
-    // TODO
-    return Optional.empty();
+    Query query = new Query(Criteria.where("id").is(id));
+    return Optional.ofNullable(mongoTemplate.findOne(query, Inventory.class));
   }
 
   /**
@@ -72,17 +76,27 @@ public class InventoryDAO {
    * @return Updated Inventory.
    */
   public Optional<Inventory> update(String id, Inventory inventory) {
-    // TODO
-    return Optional.empty();
+    Query query = new Query(Criteria.where("id").is(id));
+    Update update = new Update();
+    update.set("name", inventory.getName());
+    update.set("productType", inventory.getProductType());
+    update.set("description", inventory.getDescription());
+    update.set("averagePrice", inventory.getAveragePrice());
+    update.set("amount", inventory.getAmount());
+    update.set("unitOfMeasurement", inventory.getUnitOfMeasurement());
+    update.set("bestBeforeDate", inventory.getBestBeforeDate());
+    update.set("neverExpires", inventory.isNeverExpires());
+    update.set("availableStores", inventory.getAvailableStores());
+    return Optional.ofNullable(mongoTemplate.findAndModify(query, update, Inventory.class));
   }
 
   /**
    * Delete Inventory By Id.
-   * @param id Id of Inventory.
+   * @param id id of Inventory.
    * @return Deleted Inventory.
    */
   public Optional<Inventory> delete(String id) {
-    // TODO
-    return Optional.empty();
+    Query query = new Query(Criteria.where("id").is(id));
+    return Optional.ofNullable(mongoTemplate.findAndRemove(query, Inventory.class));
   }
 }
