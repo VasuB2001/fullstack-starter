@@ -33,6 +33,11 @@ public class InventoryDAOTest {
   private static final String NAME = "Amber";
   private static final String PRODUCT_TYPE = "hops";
 
+  private static final String ID = "id";
+
+  private static final String TEST_ID = "testID";
+
+
   @Before
   public void setup() {
     this.inventoryDAO = new InventoryDAO(this.mongoTemplate);
@@ -65,21 +70,22 @@ public class InventoryDAOTest {
   public void createTest() {
     Inventory inventory = new Inventory();
     inventory.setName(NAME);
-    inventory.setId("testID");
+    inventory.setId(TEST_ID);
     Inventory addedInventory = inventoryDAO.create(inventory);
-    List<Inventory> actualInventory = inventoryDAO.findAll();
+    List<Inventory> actualInventory = mongoTemplate.findAll(Inventory.class);
     Assert.assertFalse(actualInventory.isEmpty());
-    Assert.assertFalse(inventoryDAO.retrieve("testID").isPresent());
+    Query query1 = new Query(Criteria.where(ID).is(TEST_ID));
+    Assert.assertNull(mongoTemplate.findOne(query1, Inventory.class));
     Assert.assertNotNull(addedInventory);
-    Query query = new Query(Criteria.where("id").is(addedInventory.getId()));
-    Assert.assertEquals(mongoTemplate.findOne(query, Inventory.class), addedInventory);
+    Query query2 = new Query(Criteria.where(ID).is(addedInventory.getId()));
+    Assert.assertEquals(mongoTemplate.findOne(query2, Inventory.class), addedInventory);
   }
 
   @Test
   public void retrieveTest() {
     Inventory inventory = new Inventory();
     inventory.setName(NAME);
-    inventory.setId("testretrieveID");
+    inventory.setId(TEST_ID);
     Inventory addedInventory = mongoTemplate.save(inventory);
     Optional<Inventory> retrievedInventory = inventoryDAO.retrieve(addedInventory.getId());
     Assert.assertTrue(retrievedInventory.isPresent());
@@ -92,10 +98,10 @@ public class InventoryDAOTest {
   public void deleteTest() {
     Inventory inventory = new Inventory();
     inventory.setName(NAME);
-    inventory.setId("testDeleteID");
+    inventory.setId(TEST_ID);
     Inventory addedInventory = mongoTemplate.save(inventory);
     Assert.assertTrue(inventoryDAO.delete(addedInventory.getId()).isPresent());
-    Query query = new Query(Criteria.where("id").is(addedInventory.getId()));
+    Query query = new Query(Criteria.where(ID).is(addedInventory.getId()));
     Assert.assertNull(mongoTemplate.findOne(query, Inventory.class));
   }
 }
