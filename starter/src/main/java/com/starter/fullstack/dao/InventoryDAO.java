@@ -21,6 +21,8 @@ public class InventoryDAO {
   private static final String NAME = "name";
   private static final String PRODUCT_TYPE = "productType";
 
+  private static final String ID = "id";
+
   /**
    * Default Constructor.
    * @param mongoTemplate MongoTemplate.
@@ -64,7 +66,7 @@ public class InventoryDAO {
    * @return Found Inventory.
    */
   public Optional<Inventory> retrieve(String id) {
-    Query query = new Query(Criteria.where("id").is(id));
+    Query query = new Query(Criteria.where(ID).is(id));
     return Optional.ofNullable(mongoTemplate.findOne(query, Inventory.class));
   }
 
@@ -75,7 +77,7 @@ public class InventoryDAO {
    * @return Updated Inventory.
    */
   public Optional<Inventory> update(String id, Inventory inventory) {
-    Query query = new Query(Criteria.where("id").is(id));
+    Query query = new Query(Criteria.where(ID).is(id));
     Update update = new Update();
     update.set("name", inventory.getName());
     update.set("productType", inventory.getProductType());
@@ -95,7 +97,8 @@ public class InventoryDAO {
    * @return Deleted Inventory.
    */
   public Optional<Inventory> delete(String id) {
-    Query query = new Query(Criteria.where("id").is(id));
+
+    Query query = new Query(Criteria.where(ID).is(id));
     return Optional.ofNullable(mongoTemplate.findAndRemove(query, Inventory.class));
   }
 }
