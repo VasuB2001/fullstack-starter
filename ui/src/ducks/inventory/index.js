@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { createAction, handleActions } from 'redux-actions'
 import { openError, openSuccess } from '../alerts'
-import { refreshProducts } from '../products'
 
 const actions = {
   INVENTORY_GET_ALL: 'inventory/get_all',

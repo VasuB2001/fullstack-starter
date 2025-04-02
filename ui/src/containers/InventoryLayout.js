@@ -1,8 +1,8 @@
-import InventoryFormModal from '../components/Inventories/InventoryFormModal'
 import * as inventoryDuck from '../ducks/inventory'
 import * as productDuck from '../ducks/products'
 import Checkbox from '@material-ui/core/Checkbox'
 import Grid from '@material-ui/core/Grid'
+import InventoryFormModal from '../components/Inventories/InventoryFormModal'
 import { makeStyles } from '@material-ui/core/styles'
 import { MeasurementUnits } from '../constants/units'
 import moment from 'moment'
@@ -48,6 +48,7 @@ const InventoryLayout = (props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const inventory = useSelector(state => state.inventory.all)
+  const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const saveInventories = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
   useEffect(() => {
@@ -61,26 +62,13 @@ const InventoryLayout = (props) => {
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
-
   const [isCreateOpen, setCreateOpen] = React.useState(false)
-  const [isEditOpen, setEditOpen] = React.useState(false)
-  const [isDeleteOpen, setDeleteOpen] = React.useState(false)
   const toggleCreate = () => {
     setCreateOpen(true)
   }
-  const toggleEdit = () => {
-    setEditOpen(true)
-  }
-  const toggleDelete = () => {
-    setDeleteOpen(true)
-  }
+
   const toggleModals = (resetChecked) => {
     setCreateOpen(false)
-    setDeleteOpen(false)
-    setEditOpen(false)
-    if (resetChecked) {
-      setChecked([])
-    }
   }
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -123,8 +111,6 @@ const InventoryLayout = (props) => {
         <EnhancedTableToolbar
           numSelected={selected.length} title='Inventory'
           toggleCreate={toggleCreate}
-          toggleDelete={toggleDelete}
-          toggleEdit={toggleEdit}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
@@ -160,7 +146,7 @@ const InventoryLayout = (props) => {
                       <TableCell align='right'>{inv.description}</TableCell>
                       <TableCell align='right'>{inv.amount}</TableCell>
                       <TableCell align='right'>{inv.unitOfMeasurement}</TableCell>
-                      <TableCell align='right'>{inv.bestBeforeDate}</TableCell>
+                      <TableCell align='right'>{moment(inv.bestBeforeDate).format('MM/DD/YYYY')}</TableCell>
                     </TableRow>
                   )
                 })}
@@ -170,6 +156,8 @@ const InventoryLayout = (props) => {
         <InventoryFormModal
           title='Create'
           formName='inventoryCreate'
+          products={products}
+          units={MeasurementUnits}
           isDialogOpen={isCreateOpen}
           handleDialog={toggleModals}
           handleInventory={saveInventories}

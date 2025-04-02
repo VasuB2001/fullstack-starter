@@ -5,10 +5,11 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Grid from '@material-ui/core/Grid'
+import moment from 'moment'
 import React from 'react'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
-import {FormControlLabel, FormGroup, MenuItem, Select} from '@material-ui/core'
+import { FormControlLabel, FormGroup, MenuItem } from '@material-ui/core'
 
 
 
@@ -24,7 +25,6 @@ class InventoryFormModal extends React.Component {
       initialValues
     } = this.props
 
-
     return (
       <Dialog
         open={this.props.isDialogOpen}
@@ -35,7 +35,8 @@ class InventoryFormModal extends React.Component {
         <Formik
           initialValues={initialValues}
           onSubmit={values => {
-            handleInventory(values)
+            const instBestBeforeDate = moment(values.bestBeforeDate)
+            handleInventory({ ...values, bestBeforeDate: instBestBeforeDate })
             handleDialog(true)
           }}>
           {helpers =>
@@ -44,7 +45,6 @@ class InventoryFormModal extends React.Component {
               autoComplete='off'
               id={formName}
             >
-              {console.log(units)}
               <DialogTitle id='alert-dialog-title'>
                 {`${title} Inventory`}
               </DialogTitle>
@@ -52,7 +52,7 @@ class InventoryFormModal extends React.Component {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Field
-                      custom={{ variant: 'outlined', fullWidth: true}}
+                      custom={{ variant: 'outlined', fullWidth: true }}
                       name='name'
                       label='Name'
                       component={TextField}
@@ -119,8 +119,8 @@ class InventoryFormModal extends React.Component {
                       select
                       required
                     >
-                      {Object.values(units).map((unit) =>
-                        <MenuItem key={unit.abbreviation} value={unit.name}>{unit.name}</MenuItem>
+                      {Object.entries(units).map(([key, val]) =>
+                        <MenuItem key={key} value={key}>{val.name}</MenuItem>
                       )}
                     </Field>
                   </Grid>
