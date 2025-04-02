@@ -4,6 +4,8 @@ import com.starter.fullstack.api.Inventory;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
+import javax.naming.Name;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
@@ -22,6 +24,20 @@ public class InventoryDAO {
   private static final String PRODUCT_TYPE = "productType";
 
   private static final String ID = "id";
+
+  private static final String DESCRIPTION = "description";
+
+  private static final String AVERAGE_PRICE = "averagePrice";
+
+  private static final String AMOUNT = "amount";
+
+  private static final String UNIT_OF_MEASUREMENT = "unitOfMeasurement";
+
+  private static final String BEST_BEFORE_DATE = "bestBeforeDate";
+
+  private static final String NEVER_EXPIRES = "neverExpires";
+
+  private static final String AVAILABLE_STORES = "availableStores";
 
   /**
    * Default Constructor.
@@ -79,15 +95,15 @@ public class InventoryDAO {
   public Optional<Inventory> update(String id, Inventory inventory) {
     Query query = new Query(Criteria.where(ID).is(id));
     Update update = new Update();
-    update.set("name", inventory.getName());
-    update.set("productType", inventory.getProductType());
-    update.set("description", inventory.getDescription());
-    update.set("averagePrice", inventory.getAveragePrice());
-    update.set("amount", inventory.getAmount());
-    update.set("unitOfMeasurement", inventory.getUnitOfMeasurement());
-    update.set("bestBeforeDate", inventory.getBestBeforeDate());
-    update.set("neverExpires", inventory.isNeverExpires());
-    update.set("availableStores", inventory.getAvailableStores());
+    update.set(NAME, inventory.getName());
+    update.set(PRODUCT_TYPE, inventory.getProductType());
+    update.set(DESCRIPTION, inventory.getDescription());
+    update.set(AVERAGE_PRICE, inventory.getAveragePrice());
+    update.set(AMOUNT, inventory.getAmount());
+    update.set(UNIT_OF_MEASUREMENT, inventory.getUnitOfMeasurement());
+    update.set(BEST_BEFORE_DATE, inventory.getBestBeforeDate());
+    update.set(NEVER_EXPIRES, inventory.isNeverExpires());
+    update.set(AVAILABLE_STORES, inventory.getAvailableStores());
     return Optional.ofNullable(mongoTemplate.findAndModify(query, update, Inventory.class));
   }
 
