@@ -52,12 +52,12 @@ public class InventoryController {
   /**
    * deletes an inventory, if it exists
    * @param id is the id of the inventory
-   * @return the deleted inventory, or null if no inventory matching the id exists.
    */
   @DeleteMapping
-  public Inventory deleteInventory(@RequestBody String id) {
-    Optional<Inventory> deletedInventory = this.inventoryDAO.delete(id);
-    return deletedInventory.orElse(null);
+  public void deleteInventory(@RequestBody List<String> id) {
+    Optional<List<Inventory>> deletedInventory = this.inventoryDAO.delete(id);
+
+    // return deletedInventory.orElse(null);
   }
 }
 

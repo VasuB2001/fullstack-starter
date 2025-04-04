@@ -110,9 +110,9 @@ public class InventoryDAO {
    * @param id id of Inventory.
    * @return Deleted Inventory.
    */
-  public Optional<Inventory> delete(String id) {
+  public Optional<List<Inventory>> delete(List<String> id) {
 
-    Query query = new Query(Criteria.where(ID).is(id));
-    return Optional.ofNullable(mongoTemplate.findAndRemove(query, Inventory.class));
+    Query query = new Query(Criteria.where(ID).in(id));
+    return Optional.of(mongoTemplate.findAllAndRemove(query, Inventory.class));
   }
 }

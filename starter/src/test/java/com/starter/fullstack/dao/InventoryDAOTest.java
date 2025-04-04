@@ -1,6 +1,7 @@
 package com.starter.fullstack.dao;
 
 import com.starter.fullstack.api.Inventory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Resource;
@@ -36,6 +37,8 @@ public class InventoryDAOTest {
   private static final String ID = "id";
 
   private static final String TEST_ID = "testID";
+
+  private static final String TEST_ID_TWO = "testIDTwo";
 
 
   @Before
@@ -100,7 +103,14 @@ public class InventoryDAOTest {
     inventory.setName(NAME);
     inventory.setId(TEST_ID);
     Inventory addedInventory = mongoTemplate.save(inventory);
-    Assert.assertTrue(inventoryDAO.delete(addedInventory.getId()).isPresent());
+    Inventory inventory2 = new Inventory();
+    inventory.setName(NAME);
+    inventory.setId(TEST_ID_TWO);
+    List<String> inventoryIDs = new ArrayList<>() {{
+        add(TEST_ID);
+        add(TEST_ID_TWO);
+      }};
+    Assert.assertTrue(inventoryDAO.delete(inventoryIDs).isPresent());
     Query query = new Query(Criteria.where(ID).is(addedInventory.getId()));
     Assert.assertNull(mongoTemplate.findOne(query, Inventory.class));
   }
