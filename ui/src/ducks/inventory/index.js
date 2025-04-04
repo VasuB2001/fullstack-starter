@@ -15,6 +15,21 @@ export let defaultState = {
   fetched: false,
 }
 
+export const saveInventory = createAction(actions.INVENTORY_SAVE, (inventory) =>
+  (dispatch, getState, config) => axios
+    .post(`${config.restAPIUrl}/inventory`, inventory)
+    .then((suc) => {
+      const invs = []
+      getState().inventory.all.forEach(inv => {
+        if (inv.id !== suc.data.id) {
+          invs.push(inv)
+        }
+      })
+      invs.push(suc.data)
+      dispatch(refreshInventory(invs))
+    })
+)
+
 export const findInventory = createAction(actions.INVENTORY_GET_ALL, () =>
   (dispatch, getState, config) => axios
     .get(`${config.restAPIUrl}/inventory`)
