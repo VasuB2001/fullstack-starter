@@ -1,3 +1,4 @@
+import * as Yup from 'yup'
 import Button from '@material-ui/core/Button'
 import Checkbox from '@material-ui/core/Checkbox'
 import Dialog from '@material-ui/core/Dialog'
@@ -13,8 +14,14 @@ import { FormControlLabel, FormGroup, MenuItem } from '@material-ui/core'
 
 
 
+
 class InventoryFormModal extends React.Component {
   render() {
+    const inventorySchema = Yup.object().shape({
+      name: Yup.string().required(),
+      productType: Yup.string().required(),
+      unitOfMeasurement: Yup.string().required(),
+    })
     const {
       formName,
       handleDialog,
@@ -34,6 +41,7 @@ class InventoryFormModal extends React.Component {
       >
         <Formik
           initialValues={initialValues}
+          validationSchema={inventorySchema}
           onSubmit={values => {
             const instBestBeforeDate = moment(values.bestBeforeDate)
             handleInventory({ ...values, bestBeforeDate: instBestBeforeDate })
