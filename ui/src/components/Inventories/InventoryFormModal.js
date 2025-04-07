@@ -17,8 +17,8 @@ import { FormControlLabel, FormGroup, MenuItem } from '@material-ui/core'
 const InventoryFormModal = (props) => {
   const inventorySchema = Yup.object().shape({
     name: Yup.string().required(),
-    averagePrice: Yup.number().integer(),
-    amount: Yup.number().integer(),
+    averagePrice: Yup.number().positive('price must be greater than zero').min(0),
+    amount: Yup.number().integer().positive('amount must be greater than zero').min(0),
     productType: Yup.string().required(),
     unitOfMeasurement: Yup.string().required(),
   })
