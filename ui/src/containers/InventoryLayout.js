@@ -51,6 +51,7 @@ const InventoryLayout = (props) => {
   const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const saveInventories = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
+  const defaultValues = { averagePrice: 0, amount: 0, bestBeforeDate: moment().format('YYYY-MM-DD') }
   useEffect(() => {
     if (!isFetched) {
       dispatch(inventoryDuck.findInventory())
@@ -161,7 +162,7 @@ const InventoryLayout = (props) => {
           isDialogOpen={isCreateOpen}
           handleDialog={toggleModals}
           handleInventory={saveInventories}
-          initialValues={{}}
+          initialValues={defaultValues}
         />
       </Grid>
     </Grid>
