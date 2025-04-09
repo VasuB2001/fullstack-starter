@@ -10,7 +10,7 @@ import moment from 'moment'
 import React from 'react'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
-import { FormControlLabel, FormGroup, MenuItem } from '@material-ui/core'
+import { FormControlLabel, MenuItem } from '@material-ui/core'
 
 
 
@@ -130,11 +130,14 @@ const InventoryFormModal = (props) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
-                  <FormGroup>
-                    <FormControlLabel
-                      name='neverExpires'
-                      required control={<Checkbox />} label="Does this Expire?" />
-                  </FormGroup>
+                  <Field
+                    custom={{ variant: 'outlined', fullWidth: true, }}
+                    name='neverExpires'
+                    as={FormControlLabel}
+                    control={<Checkbox />}
+                    label="This does not Expire"
+                    required
+                  />
                 </Grid>
 
               </Grid>
