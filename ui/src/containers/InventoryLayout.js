@@ -51,7 +51,8 @@ const InventoryLayout = (props) => {
   const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const saveInventories = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
-  const defaultValues = { averagePrice: 0, amount: 0, bestBeforeDate: moment().format('YYYY-MM-DD') }
+  const defaultValues = { name: '', productType: null, description: '', averagePrice: 0, amount: 0,
+    unitOfMeasurement: null, bestBeforeDate: moment().format('YYYY-MM-DD'), neverExpires: false }
   useEffect(() => {
     if (!isFetched) {
       dispatch(inventoryDuck.findInventory())

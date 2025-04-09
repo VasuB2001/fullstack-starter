@@ -131,7 +131,9 @@ const InventoryFormModal = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <FormGroup>
-                    <FormControlLabel required control={<Checkbox />} label="Does this Expire?" />
+                    <FormControlLabel
+                      name='neverExpires'
+                      required control={<Checkbox />} label="Does this Expire?" />
                   </FormGroup>
                 </Grid>
 
