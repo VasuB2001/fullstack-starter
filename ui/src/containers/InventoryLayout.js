@@ -79,6 +79,13 @@ const InventoryLayout = (props) => {
   const toggleEdit = () => {
     setEditOpen(true)
   }
+
+  const populateEditFields = (inventory) => {
+    const thisInventory = inventory?.filter(inv => inv.id === selected[0])[0]
+    const bestBeforeDate = moment(thisInventory?.bestBeforeDate).format('YYYY-MM-DD')
+    return { ...thisInventory, bestBeforeDate }
+  }
+
   const toggleModals = (resetChecked) => {
     setCreateOpen(false)
     setDeleteOpen(false)
@@ -190,7 +197,7 @@ const InventoryLayout = (props) => {
           isDialogOpen={isEditOpen}
           handleDialog={toggleModals}
           handleInventory={updateInventory}
-          initialValues={inventory.filter(inv => inv.id === selected[0])[0]}
+          initialValues={populateEditFields(inventory)}
         />
         <InventoryDeleteModal
           isDialogOpen={isDeleteOpen}
