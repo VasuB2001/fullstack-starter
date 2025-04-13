@@ -31,7 +31,6 @@ const InventoryFormModal = (props) => {
     title,
     initialValues
   } = props
-  console.warn(initialValues)
   return (
     <Dialog
       open={props.isDialogOpen}
