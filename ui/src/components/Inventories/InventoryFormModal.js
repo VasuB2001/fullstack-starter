@@ -31,7 +31,6 @@ const InventoryFormModal = (props) => {
     title,
     initialValues
   } = props
-
   return (
     <Dialog
       open={props.isDialogOpen}
@@ -132,6 +131,7 @@ const InventoryFormModal = (props) => {
                 <Grid item xs={12} sm={12}>
                   <Field
                     custom={{ variant: 'outlined', fullWidth: true, }}
+                    type= 'checkbox'
                     name='neverExpires'
                     as={FormControlLabel}
                     control={<Checkbox />}

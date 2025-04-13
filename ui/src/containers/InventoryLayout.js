@@ -53,6 +53,7 @@ const InventoryLayout = (props) => {
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const saveInventories = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
   const removeInventory = useCallback(ids => { dispatch(inventoryDuck.removeInventory(ids)) }, [dispatch])
+  const updateInventory = useCallback(inventory => { dispatch(inventoryDuck.updateInventory(inventory)) }, [dispatch])
   const defaultValues = { name: '', productType: null, description: '', averagePrice: 0, amount: 0,
     unitOfMeasurement: null, bestBeforeDate: moment().format('YYYY-MM-DD'), neverExpires: false }
   useEffect(() => {
@@ -68,15 +69,27 @@ const InventoryLayout = (props) => {
   const [selected, setSelected] = React.useState([])
   const [isCreateOpen, setCreateOpen] = React.useState(false)
   const [isDeleteOpen, setDeleteOpen] = React.useState(false)
+  const [isEditOpen, setEditOpen] = React.useState(false)
   const toggleCreate = () => {
     setCreateOpen(true)
   }
   const toggleDelete = () => {
     setDeleteOpen(true)
   }
+  const toggleEdit = () => {
+    setEditOpen(true)
+  }
+
+  const populateEditFields = (inventory) => {
+    const thisInventory = inventory?.filter(inv => inv.id === selected[0])[0]
+    const bestBeforeDate = moment(thisInventory?.bestBeforeDate).format('YYYY-MM-DD')
+    return { ...thisInventory, bestBeforeDate }
+  }
+
   const toggleModals = (resetChecked) => {
     setCreateOpen(false)
     setDeleteOpen(false)
+    setEditOpen(false)
     if (resetChecked) {
       setSelected([])
     }
@@ -123,6 +136,7 @@ const InventoryLayout = (props) => {
           numSelected={selected.length} title='Inventory'
           toggleCreate={toggleCreate}
           toggleDelete={toggleDelete}
+          toggleEdit={toggleEdit}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
@@ -174,6 +188,16 @@ const InventoryLayout = (props) => {
           handleDialog={toggleModals}
           handleInventory={saveInventories}
           initialValues={defaultValues}
+        />
+        <InventoryFormModal
+          title='Edit'
+          formName='inventoryEdit'
+          products={products}
+          units={MeasurementUnits}
+          isDialogOpen={isEditOpen}
+          handleDialog={toggleModals}
+          handleInventory={updateInventory}
+          initialValues={populateEditFields(inventory)}
         />
         <InventoryDeleteModal
           isDialogOpen={isDeleteOpen}
